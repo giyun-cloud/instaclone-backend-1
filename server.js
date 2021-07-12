@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server";
 
-const movies = [
+let movies = [
   {
     title: "hello",
     year: 2021,
