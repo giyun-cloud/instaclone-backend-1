@@ -35,5 +35,19 @@ export default {
         return error;
       }
     },
+    login: (_, { username, password }) => {
+      const user = client.user.findFirst({ where: { username } });
+      if (!user)
+        return {
+          ok: false,
+          error: "User not found.",
+        };
+      const passwordOk = bcrypt.compare(password, user.password);
+      if (!passwordOk)
+        return {
+          ok: false,
+          error: "Incorrect password.",
+        };
+    },
   },
 };
