@@ -7,8 +7,9 @@ export default {
     editProfile: async (
       _,
       { firstName, lastName, username, email, password },
-      { loggedInUser },
+      { loggedInUser, protectResolver },
     ) => {
+      protectResolver(loggedInUser);
       let uglyPassword = null;
       password && (uglyPassword = await bcrypt.hash(password, 10));
       const updatedUser = await client.user.update({
