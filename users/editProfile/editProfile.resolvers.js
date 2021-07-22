@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
 const resolverFn = async (
   _,
-  { firstName, lastName, username, email, password, bio },
+  { firstName, lastName, username, email, password, bio, avatar },
   { loggedInUser },
 ) => {
+  console.log(avatar);
   let uglyPassword = null;
   password && (uglyPassword = await bcrypt.hash(password, 10));
   const updatedUser = await client.user.update({
