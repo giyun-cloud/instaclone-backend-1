@@ -1,4 +1,5 @@
 import client from "../../client";
+import { createWriteStream } from "fs";
 import bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
 const resolverFn = async (
@@ -6,7 +7,10 @@ const resolverFn = async (
   { firstName, lastName, username, email, password, bio, avatar },
   { loggedInUser },
 ) => {
-  console.log(avatar);
+  const { filename, createReadStream } = await avatar;
+  const readStream = createReadStream();
+  const writeStream = createWriteStream(process.cwd() + "/uploads/" + filename);
+  readStream.pipe(writeStream);
   let uglyPassword = null;
   password && (uglyPassword = await bcrypt.hash(password, 10));
   const updatedUser = await client.user.update({
