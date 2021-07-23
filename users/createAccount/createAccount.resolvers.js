@@ -22,7 +22,7 @@ export default {
         });
         if (existingUser) throw new Error("This username/email is already");
         const hashPassword = await bcrypt.hash(password, 10);
-        return client.user.create({
+        await client.user.create({
           data: {
             firstName,
             lastName,
@@ -31,8 +31,14 @@ export default {
             password: hashPassword,
           },
         });
+        return {
+          ok: true,
+        };
       } catch (error) {
-        return error;
+        return {
+          ok: false,
+          error: "existingUser",
+        };
       }
     },
   },
