@@ -3,6 +3,17 @@ import client from "../../client";
 export default {
   Query: {
     seeFollowers: async (_, { username, page }) => {
+      const takeCount = 5;
+      const ok = await client.user.findUnique({
+        where: { username },
+        select: { id: true },
+      });
+      if (!ok)
+        return {
+          ok: false,
+          error: "Can't find username",
+        };
+
       // 방법-1
       // const followers = client.user.findMany({
       //   where: {
@@ -24,12 +35,22 @@ export default {
           },
         })
         .followers({
-          take: 5,
-          skip: (page - 1) * 5,
+          take: takeCount,
+          skip: (page - 1) * takeCount,
         });
+      const totalFollowers = await client.user.count({
+        where: {
+          following: {
+            some: {
+              username,
+            },
+          },
+        },
+      });
       return {
         ok: true,
         followers,
+        totalPages: Math.ceil(totalFollowers / takeCount),
       };
     },
   },
