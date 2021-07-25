@@ -1,10 +1,32 @@
+import client from "../client";
+
 export default {
   User: {
-    totalFollowers: (root) => {
-      console.log("🔴🔴🔴🔴 User");
-      console.log(root);
-      return 666;
+    totalFollowers: ({ id }) => {
+      return client.user.count({
+        where: {
+          following: {
+            some: {
+              id,
+            },
+          },
+        },
+      });
     },
-    totalFollowing: () => 999,
+    totalFollowing: ({ id }) => {
+      return client.user.count({
+        where: {
+          followers: {
+            some: {
+              id,
+            },
+          },
+        },
+      });
+    },
+    isMe: ({ id }, _, { loggedInUser }) => {
+      if (!loggedInUser) return false;
+      return id === loggedInUser.id;
+    },
   },
 };
