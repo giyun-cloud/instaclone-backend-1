@@ -13,6 +13,7 @@ export default {
           },
         },
       }),
+    likes: ({ id }) => client.like.count({ where: { photo: { id } } }),
   },
   Hashtag: {
     photos: ({ id }, { page }, { loggedInUser }) => {
