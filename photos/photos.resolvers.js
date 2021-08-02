@@ -14,6 +14,7 @@ export default {
         },
       }),
     likes: ({ id }) => client.like.count({ where: { photo: { id } } }),
+    comments: ({ id }) => client.comment.count({ where: { photoId: id } }),
   },
   Hashtag: {
     photos: ({ id }, { page }, { loggedInUser }) => {
